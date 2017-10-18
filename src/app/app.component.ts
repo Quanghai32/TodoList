@@ -16,7 +16,7 @@ interface Todo {
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  templateUrl:'./app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
@@ -32,12 +32,14 @@ export class AppComponent {
       .combineLatest(
       this.model$,
       this.filter$,
-      (models: any, visibilityFilter: any) => {
-        return models.filter(visibilityFilter)
+      (models, visibilityFilter) => {
+        return{
+          a:models.present.filter(visibilityFilter)
+        } 
       }
       );
-    this.todos$.subscribe(x => console.log(x));
 
+    this.todos$.subscribe(x => console.log(x));
   }
   addTodo(newTodo) {
     this.store.dispatch({
@@ -61,8 +63,19 @@ export class AppComponent {
     this.store.dispatch({
       type: filter
     });
+    // switch (filter) {
+    //   case ALL:
+    //     this.todos$ = this.model$.filter(todo => true);
+    //     break;
+    //   case COMPLETE:
+    //     this.todos$ = this.model$.filter(todo => true);
+    //     break;
+    //   case PENDING:
+    //     this.todos$ = this.model$.filter((todo) => todo.completed);
+    //     break;
+    // }
   }
   history(type) {
-    this.store.dispatch({ type })
+    this.store.dispatch({ type: type })
   }
 }

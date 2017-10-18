@@ -5,7 +5,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
     template: `
       <div>
         <todo-list-item 
-          *ngFor="let todo of todos"
+          *ngFor="let todo of todos.a"
           [todo]="todo"
           (complete)="completeTodo.emit($event)"
           (delete)="deleteTodo.emit($event)"
