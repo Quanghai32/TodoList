@@ -8,7 +8,7 @@ import { ADD_TODO, UPDATE_TODO, DELETE_TODO, COMPLETE_TODO, ALL, COMPLETE, PENDI
 //import { AppState } from './state/app-state'
 
 
-interface AppState {
+interface Todo {
   id: number;
   text: string;
   completed: boolean;
@@ -20,10 +20,23 @@ interface AppState {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  todos$: Observable<AppState>;
+  todos$: Observable<any>;
+  model$: Observable<any>;
+  filter$: Observable<any>;
 
-  constructor(private store: Store<AppState>) {
-    this.todos$ = store.select('todos')
+  constructor(private store: Store<any>) {
+    this.model$ = store.select('todos');
+    this.filter$ = store.select('visibilityFilter');
+
+    this.todos$ = Observable
+      .combineLatest(
+      this.model$,
+      this.filter$,
+      (models: any, visibilityFilter: any) => {
+        return models.filter(visibilityFilter)
+      }
+      );
+    this.todos$.subscribe(x => console.log(x));
 
   }
   addTodo(newTodo) {
